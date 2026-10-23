@@ -20,6 +20,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install dependencies
+        run: pip install requests
+
       - name: Run Python Scraper
         run: python fetch_data.py
 
@@ -30,3 +33,4 @@ jobs:
           git add data.json
           git diff --staged --quiet || git commit -m "Auto-update data.json"
           git push
+          
