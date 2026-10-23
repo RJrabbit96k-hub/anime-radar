@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auto-Updated Anime Radar</title>
+  <title>Live Airing Anime Radar</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen p-6">
@@ -21,35 +21,35 @@
     </header>
 
     <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Cards injected automatically via JS -->
+      <p class="text-slate-500 text-sm">Loading anime data...</p>
     </div>
   </div>
 
   <script>
     async function loadContent() {
       try {
-        const res = await fetch('./data.json?t=' + new Date().getTime());
+        const res = await fetch('./data.json?t=' + Date.now());
         const data = await res.json();
         document.getElementById('timestamp').textContent = `Last Auto-Synced: ${data.last_updated}`;
         
         const grid = document.getElementById('grid');
         grid.innerHTML = data.items.map(item => `
-          <a href="${item.url}" target="_blank" class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:border-cyan-500/50 transition flex flex-col">
+          <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:border-cyan-500/50 hover:scale-[1.02] transition duration-200 flex flex-col">
             <img src="${item.image}" alt="${item.title}" class="h-64 w-full object-cover">
             <div class="p-4 flex-1 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
-                  <span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded">⭐ ${item.score}</span>
-                  <span>Ep: ${item.episodes}</span>
+                  <span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded font-medium">⭐ ${item.score}</span>
+                  <span>Episodes: ${item.episodes}</span>
                 </div>
-                <h2 class="font-bold text-base line-clamp-1 mb-1">${item.title}</h2>
+                <h2 class="font-bold text-base line-clamp-1 mb-1 text-slate-100">${item.title}</h2>
                 <p class="text-xs text-slate-400 line-clamp-3">${item.synopsis}</p>
               </div>
             </div>
           </a>
         `).join('');
       } catch (err) {
-        document.getElementById('timestamp').textContent = 'Waiting for first automated run...';
+        document.getElementById('timestamp').textContent = 'Waiting for automated run...';
       }
     }
     loadContent();
